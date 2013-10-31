@@ -53,24 +53,32 @@ class TextModel extends ModeloPadre{
 }
 
 
-$modelo = array(
-	'TABLA1' => array(
-		'nombre' => 'Tablita 1',
-		'campos' => array(
-			'NOMBRE__TA1' => array(
-				'nombre' => 'Nombre',
-				'tipo' => Modelos::text(array())
-			),
-			'NOMBRE__TA2' => array(
-				'nombre' => 'Nombre',
-				'tipo' => Modelos::text(array(
-					'max_length' => 256
-				))
-			)
-		)
-	)
-);
 
-foreach ($modelo['TABLA1']['campos'] as $k => $v) {
-	echo $v['tipo']->getInput() . "\n";
+class Tabla1{
+	public function __construct(){
+		$this->campo1 = Modelos::text(array());
+		$this->campo2 = Modelos::text(array('max_length' => 256));
+	}
 }
+
+
+class Tabla1Admin{
+	public $model;
+	public $modelName = 'Tabla1';
+	public $campos = array('campo1','campo2');
+
+	public function __construct(){
+		$this->model = new $this->modelName;
+	}
+
+	public function getForm(){
+		$camposHtml = array();
+		foreach ($this->campos as $v) {
+			$camposHtml[] = $this->model->{$v}->getInput();
+		}
+		print_r($camposHtml);
+	}
+}
+
+$a = new Tabla1Admin();
+$a->getForm();
