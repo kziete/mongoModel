@@ -53,6 +53,20 @@ class TextModel extends ModeloPadre{
 }
 
 
+class AdminPadre{
+
+	public function __construct(){		
+		$this->model = new $this->modelName;
+	}
+	public function getForm(){
+		$camposHtml = array();
+		foreach ($this->campos as $v) {
+			$camposHtml[] = $this->model->{$v}->getInput();
+		}
+		print_r($camposHtml);
+	}
+}
+
 
 class Tabla1{
 	public function __construct(){
@@ -62,21 +76,13 @@ class Tabla1{
 }
 
 
-class Tabla1Admin{
+class Tabla1Admin extends AdminPadre{
 	public $model;
 	public $modelName = 'Tabla1';
 	public $campos = array('campo1','campo2');
 
 	public function __construct(){
-		$this->model = new $this->modelName;
-	}
-
-	public function getForm(){
-		$camposHtml = array();
-		foreach ($this->campos as $v) {
-			$camposHtml[] = $this->model->{$v}->getInput();
-		}
-		print_r($camposHtml);
+		parent::__construct();
 	}
 }
 
