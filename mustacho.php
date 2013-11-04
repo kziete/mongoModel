@@ -1,6 +1,6 @@
 <?php 
 class Mustacho{
-	public $templateDir = '/var/www/mongo/widgets/';
+	public $templateDir = '/var/www/mongoModel/widgets/';
 	public $mustache;
 
 	public function __construct(){

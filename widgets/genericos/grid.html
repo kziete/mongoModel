@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+<table>
+	<tr>
+		{{#cabecera}}
+			<th>{{.}}</th>
+		{{/cabecera}}
+	</tr>
+	{{#datos}}
+	<tr>
+		{{#.}}
+			<td>{{.}}</td>
+		{{/.}}
+	</tr>
+	{{/datos}}
+</table>
+
+</body>
+</html>
