@@ -77,6 +77,12 @@ class AdminPadre{
 		$this->model = new $this->modelName;
 	}
 	public function getForm(){
+		if($_POST['aceptar']){
+			$errores = $this->model->saveData($_POST);
+			if(!$errores)
+				$this->saveOk();
+		}
+		
 		$camposHtml = array();
 		foreach ($this->campos as $campo) {
 			if($this->model->{$campo}->getInput()){
@@ -108,6 +114,10 @@ class AdminPadre{
 
 		echo $this->mustacho->render('genericos/grid.html',$output);
 	}
+	
+	public functio saveOk(){
+			
+	}
 }
 
 class SqlHelper{
@@ -120,8 +130,12 @@ class SqlHelper{
     }
     return "insert into $table (" . join(',',$campos) . ") values (" . join(',',$values) . ")";
   }
-  public static createUpdate($table){
-    
+  public static createUpdate($table, $data, $where){
+    $update = array();
+    foreach($data as $k => $v){
+      $update[] = ($k . '=' . $this->quote($v));
+    }
+    return "update $table set " . join(',',$update) . " where $where";
   }
   public static quote($string){
     return "'" . str_replace("'","''",$string) . "'"; 
@@ -133,9 +147,21 @@ class OtroModelo{
 	public function __construct(){
 		$this->table = get_class($this);
 	}
-  public function saveData($data){
-     
-  }
+	public function saveData($data){
+		$mensajes = false;
+		if($this->validar($data)){
+			if($data['id']){
+				$sql = SqlHelper::createUpdate($this->table, $data, "id =" . $data['id']);
+			}else{
+				$sql = SqlHelper::createInsert($this->table, $data);
+			}
+		}else
+			$mensajes[] = "erro de validacion, implementar algo bonito o con mas info";			
+		#ejecuto el sql de alguna manera
+		
+		#si hay alguno problema se agregan mensajes al array de retorno
+		return $mensajes;
+	}
 	public function getRows(){
 		//aca se hace el sql
 		$sql = "select * from " . $this->table;
@@ -153,6 +179,9 @@ class OtroModelo{
 				'campo2' => 'Cruz'
 			)
 		);
+	}
+	public function validar($data){
+		return true;
 	}
 }
 
