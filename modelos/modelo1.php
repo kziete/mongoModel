@@ -110,11 +110,32 @@ class AdminPadre{
 	}
 }
 
+class SqlHelper{
+  public static createInsert($table,$data){    
+    $campos = array();
+    $values = array();
+    foreach($data as $k => $v){
+      $campos[] = $k;
+      $values[] = $this->quote($v);
+    }
+    return "insert into $table (" . join(',',$campos) . ") values (" . join(',',$values) . ")";
+  }
+  public static createUpdate($table){
+    
+  }
+  public static quote($string){
+    return "'" . str_replace("'","''",$string) . "'"; 
+  }
+}
+
 class OtroModelo{
 	protected $table;
 	public function __construct(){
 		$this->table = get_class($this);
 	}
+  public function saveData($data){
+     
+  }
 	public function getRows(){
 		//aca se hace el sql
 		$sql = "select * from " . $this->table;
